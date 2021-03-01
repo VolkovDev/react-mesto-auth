@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
-import { register } from '../auth'
+import { Link } from 'react-router-dom'
 
 const Register = ({ handleRegister }) => {
   const [email, setEmail] = useState('')
@@ -30,6 +29,7 @@ const Register = ({ handleRegister }) => {
           placeholder='Email'
           required={true}
           onChange={emailHandleChange}
+          value={email}
         />
         <input
           className='auth__input'
@@ -37,6 +37,7 @@ const Register = ({ handleRegister }) => {
           placeholder='Пароль'
           required={true}
           onChange={passwordHandleChange}
+          value={password}
         />
         <button type='submit' className='auth__submit-btn'>
           Зарегистрироваться
