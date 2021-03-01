@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
-import { authorize } from '../auth'
+import { Link } from 'react-router-dom'
 
-function Login({ handleLogin, onFail, setOnFail }) {
+function Login({ onFail, handleAuthorize }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const history = useHistory()
+  function emailHandleChange(e) {
+    setEmail(e.target.value)
+  }
+
+  function passwordHandleChange(e) {
+    setPassword(e.target.value)
+  }
 
   const resetForm = () => {
     setEmail('')
@@ -20,20 +25,9 @@ function Login({ handleLogin, onFail, setOnFail }) {
       console.error('Не заполнены некоторые обязательные поля')
     }
 
-    authorize( password, email )
-      .then((data) => {
-        if (data.token) {
-          resetForm()
-          handleLogin()
-          setOnFail('')
-          history.push('/main')
-        } else if (data.message) {
-          setOnFail(data.message)
-        }
-      })
-      .catch((err) => {
-        console.log(`Error Login authorize: ${err}`)
-      })
+    handleAuthorize({ password, email })
+
+    resetForm()
   }
 
   return (
@@ -45,14 +39,16 @@ function Login({ handleLogin, onFail, setOnFail }) {
           type='email'
           required={true}
           placeholder='Email'
-          onChange={(evt) => setEmail(evt.target.value)}
+          onChange={emailHandleChange}
+          value={email}
         />
         <div className='auth__input-container'>
           <input
             className='auth__input'
             type='password'
             placeholder='Пароль'
-            onChange={(evt) => setPassword(evt.target.value)}
+            onChange={passwordHandleChange}
+            value={password}
           />
           <p className='auth__error-field'>{onFail}</p>
         </div>

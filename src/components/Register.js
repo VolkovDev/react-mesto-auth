@@ -2,29 +2,22 @@ import React, { useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 import { register } from '../auth'
 
-const Register = ({ setIsRegisterPopupOpen, setOnFail }) => {
+const Register = ({ handleRegister }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const history = useHistory()
+  function emailHandleChange(e) {
+    setEmail(e.target.value)
+  }
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault()
-    console.log('password: ',password, ' email: ', email)
-    register( password, email )
-      .then((res) => {
-        console.log(res)
-        if (res.data) {
-          setIsRegisterPopupOpen(res)
-          setOnFail('')
-          history.push('/signin')
-        } else {
-          setIsRegisterPopupOpen(res)
-        }
-      })
-      .catch((err) => {
-        console.log(err => `Error handleSubmit register: ${err}`)
-      })
+  function passwordHandleChange(e) {
+    setPassword(e.target.value)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log('password: ', password, ' email: ', email)
+    handleRegister({ password, email })
   }
 
   return (
@@ -36,14 +29,14 @@ const Register = ({ setIsRegisterPopupOpen, setOnFail }) => {
           type='email'
           placeholder='Email'
           required={true}
-          onChange={(evt) => setEmail(evt.target.value)}
+          onChange={emailHandleChange}
         />
         <input
           className='auth__input'
           type='password'
           placeholder='Пароль'
           required={true}
-          onChange={(evt) => setPassword(evt.target.value)}
+          onChange={passwordHandleChange}
         />
         <button type='submit' className='auth__submit-btn'>
           Зарегистрироваться
